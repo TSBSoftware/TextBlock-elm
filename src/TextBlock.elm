@@ -45,6 +45,7 @@ type alias TextBlockOptions =
 Use as-is or customize fields, e.g., `{ defaultOptions | indent = 2, indentChar = '.' }`.
 
 -}
+defaultOptions : TextBlockOptions
 defaultOptions =
     { indent = 0
     , indentChar = ' '

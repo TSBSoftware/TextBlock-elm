@@ -1,0 +1,12 @@
+Follow these steps to publish to packages.elm-lang.org
+
+  1.  Commit the latest code with valid documentation and passing tests to github.
+
+  2.  Create a push a git tag:
+
+      $ git tag -a 1.0.0 -m "Initial release
+      $ git push --tags
+  
+  3.  Publish the package:
+
+      $ elm publish

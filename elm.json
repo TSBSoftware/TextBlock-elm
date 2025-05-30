@@ -1,6 +1,6 @@
 {
     "type": "package",
-    "name": "TSBSoftware/textblock",
+    "name": "TSBSoftware/elm-textblock",
     "summary": "Process multiline strings with indentation stripping and formatting",
     "license": "MIT",
     "version": "1.0.0",

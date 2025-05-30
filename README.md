@@ -129,10 +129,10 @@ blocked =
 
 ## Notes
 
-    - **One-Shot Usage**: `textBlock` is designed for single application. Applying it multiple times (e.g., `textBlock (textBlock value)`) may alter indentation unexpectedly and is not recommended.
-    - **Newline Handling**: The default newline is `\n`. Customize it via TextBlockOptions if needed (e.g., `\r\n` for Windows compatibility).
+- **One-Shot Usage**: `textBlock` is designed for single application. Applying it multiple times (e.g., `textBlock (textBlock value)`) may alter indentation unexpectedly and is not recommended.
+- **Newline Handling**: The default newline is `\n`. Customize it via TextBlockOptions if needed (e.g., `\r\n` for Windows compatibility).
 
 
 ## License
 
-    **License**: MIT (see [LICENSE](https://github.com/TSBSoftware/TextBlock-elm/blob/main/LICENSE) for details)
+- **License**: MIT (see LICENSE for details)

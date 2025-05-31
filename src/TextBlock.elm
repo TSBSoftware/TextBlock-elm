@@ -93,10 +93,6 @@ textBlockWith options value =
         lines =
             splitLines options value
 
-        beginsWithWhitespace : Regex.Regex
-        beginsWithWhitespace =
-            Maybe.withDefault Regex.never (Regex.fromString "^([\\s]+)")
-
         indentSize : Int
         indentSize =
             lines
@@ -160,6 +156,11 @@ textBlockWith options value =
             String.padLeft (String.length joined + options.indent) options.indentChar joined
     in
     padded
+
+
+beginsWithWhitespace : Regex.Regex
+beginsWithWhitespace =
+    Maybe.withDefault Regex.never (Regex.fromString "^([\\s]+)")
 
 
 {-| Process a multiline string with custom options and replace placeholders with values.

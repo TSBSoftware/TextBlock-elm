@@ -106,12 +106,12 @@ textBlockWith options value =
                             |> String.trimRight
                     )
                 |> List.map
-                    (\line ->
-                        if String.endsWith "|" line then
-                            String.dropRight 1 line
+                    (\newLine ->
+                        if String.endsWith "|" newLine then
+                            String.dropRight 1 newLine
 
                         else
-                            line
+                            newLine
                     )
 
         contentLines : List String

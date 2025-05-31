@@ -100,7 +100,6 @@ textBlockWith options value =
         contentLines : List String
         contentLines =
             computeContentLines lines indentSize
-                |> List.reverse
 
         joined : String
         joined =
@@ -111,9 +110,9 @@ textBlockWith options value =
                 [ single ] ->
                     single
 
-                first :: rest ->
+                last :: rest ->
                     List.foldl
-                        (\line acc ->
+                        (\acc line ->
                             if String.endsWith "\\" acc then
                                 String.dropRight 1 acc ++ line ++ ""
 
@@ -125,7 +124,7 @@ textBlockWith options value =
                                 in
                                 acc ++ options.newline ++ paddedRight ++ ""
                         )
-                        first
+                        last
                         rest
 
         padded : String

@@ -156,7 +156,15 @@ textBlockWith options value =
 computeIndentSize : List String -> Int
 computeIndentSize lines =
     lines
-        |> List.filterMap (\line -> Regex.find beginsWithWhitespace line |> List.head)
+        |> List.filterMap
+            (\line ->
+                case Regex.find beginsWithWhitespace line |> List.head of
+                    Just match ->
+                        Just match
+
+                    Nothing ->
+                        Nothing
+            )
         |> List.map (\match -> String.length match.match)
         |> List.minimum
         |> Maybe.withDefault 0

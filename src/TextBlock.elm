@@ -175,17 +175,13 @@ computeContentLines lines indentSize =
                 (\line acc -> trimLine line indentSize :: acc)
                 []
                 lines
-
-        contentLines : List String
-        contentLines =
-            case blockedLines of
-                "" :: restOfLines ->
-                    List.reverse restOfLines
-
-                _ ->
-                    List.reverse blockedLines
     in
-    contentLines
+    case blockedLines of
+        "" :: restOfLines ->
+            List.reverse restOfLines
+
+        _ ->
+            List.reverse blockedLines
 
 
 trimLine : String -> Int -> String

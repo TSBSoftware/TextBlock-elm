@@ -103,35 +103,40 @@ textBlockWith options value =
 
         joined : String
         joined =
-            case contentLines of
-                [] ->
-                    ""
-
-                [ single ] ->
-                    single
-
-                last :: rest ->
-                    List.foldl
-                        (\line acc ->
-                            if String.endsWith "\\" line then
-                                String.dropRight 1 line ++ acc ++ ""
-
-                            else
-                                let
-                                    paddedRight : String
-                                    paddedRight =
-                                        String.padLeft (String.length acc + options.indent) options.indentChar acc
-                                in
-                                line ++ options.newline ++ paddedRight ++ ""
-                        )
-                        last
-                        rest
+            joinLines options contentLines
 
         padded : String
         padded =
             String.repeat options.indent (String.fromChar options.indentChar) ++ joined ++ ""
     in
     padded
+
+
+joinLines : TextBlockOptions -> List String -> String
+joinLines options contentLines =
+    case contentLines of
+        [] ->
+            ""
+
+        [ single ] ->
+            single
+
+        last :: rest ->
+            List.foldl
+                (\line acc ->
+                    if String.endsWith "\\" line then
+                        String.dropRight 1 line ++ acc ++ ""
+
+                    else
+                        let
+                            paddedRight : String
+                            paddedRight =
+                                String.padLeft (String.length acc + options.indent) options.indentChar acc
+                        in
+                        line ++ options.newline ++ paddedRight ++ ""
+                )
+                last
+                rest
 
 
 computeIndentSize : List String -> Int

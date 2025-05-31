@@ -14,7 +14,7 @@ emptyValueTests =
             """
     in
     test "Can read empty multiline string return empty string" <|
-        \_ ->
+        \() ->
             textBlock testValue
                 |> Expect.equal ""
 
@@ -27,7 +27,7 @@ simpleValueTests =
             """Hello"""
     in
     test "Can read simple value return unchanged value" <|
-        \_ ->
+        \() ->
             textBlock testValue
                 |> Expect.equal "Hello"
 
@@ -41,7 +41,7 @@ simpleValueTwoLineTests =
             Hello"""
     in
     test "Can read simple value on two lines and return single value" <|
-        \_ ->
+        \() ->
             textBlock testValue
                 |> Expect.equal "Hello"
 
@@ -60,7 +60,7 @@ oneLineValueTests =
             "Hello, World!"
     in
     test "One line string gets returned with no padding" <|
-        \_ ->
+        \() ->
             textBlock testValue
                 |> Expect.equal expected
 
@@ -80,7 +80,7 @@ twoLineValueTests =
             "Hello, World!\nI am me."
     in
     test "Two line string gets returned with no padding" <|
-        \_ ->
+        \() ->
             textBlock testValue
                 |> Expect.equal expected
 
@@ -101,7 +101,7 @@ newLineEscapeTests =
             "Hello, World! I am me. Who are you?"
     in
     test "Newlines omitted when \\ is used at end of line" <|
-        \_ ->
+        \() ->
             textBlock testValue
                 |> Expect.equal expected
 
@@ -110,7 +110,7 @@ indentedContentTests : Test
 indentedContentTests =
     describe "Indented content"
         [ test "is preserved using spaces" <|
-            \_ ->
+            \() ->
                 let
                     testValue : String
                     testValue =
@@ -127,7 +127,7 @@ indentedContentTests =
                 textBlock testValue
                     |> Expect.equal expected
         , test "is preserved using tabs" <|
-            \_ ->
+            \() ->
                 let
                     testValue : String
                     testValue =
@@ -144,7 +144,7 @@ indentedContentTests =
                 textBlock testValue
                     |> Expect.equal expected
         , test "with first line indented preserves indentation" <|
-            \_ ->
+            \() ->
                 let
                     testValue : String
                     testValue =
@@ -160,7 +160,7 @@ indentedContentTests =
                 textBlock testValue
                     |> Expect.equal expected
         , test "preserves all indentation when not lined up with quotes" <|
-            \_ ->
+            \() ->
                 let
                     testValue : String
                     testValue =
@@ -193,7 +193,7 @@ trailingSpaceTests =
             "This text must    \nbe blocked        "
     in
     test "Lines ending in | keep trailing spaces" <|
-        \_ ->
+        \() ->
             textBlock testValue
                 |> Expect.equal expected
 
@@ -211,7 +211,7 @@ userDefinedIndentTests =
     in
     describe "User defined indent"
         [ test "Indentation can be controlled with options" <|
-            \_ ->
+            \() ->
                 let
                     expected : String
                     expected =
@@ -226,7 +226,7 @@ userDefinedIndentTests =
                 textBlockWith options testValue
                     |> Expect.equal expected
         , test "Indentation can use an alternate character" <|
-            \_ ->
+            \() ->
                 let
                     expected : String
                     expected =
@@ -271,7 +271,7 @@ GH
             }
     in
     test "All features mixed produce proper string" <|
-        \_ ->
+        \() ->
             textBlockWith options testValue
                 |> Expect.equal expected
 
@@ -298,7 +298,7 @@ Suite 5 | Santa Ana
                 ++ "Suite 5 | Santa Ana"
     in
     test "Embedded newline characters create new lines" <|
-        \_ ->
+        \() ->
             textBlock testValue
                 |> Expect.equal expected
 
@@ -317,6 +317,6 @@ formatStringTests =
             "Hello Chris,\n\nGoodbye"
     in
     test "Can be parsed and replace template values" <|
-        \_ ->
+        \() ->
             textBlockWithFormat defaultOptions [ ( "name", "Chris" ) ] testValue
                 |> Expect.equal expected

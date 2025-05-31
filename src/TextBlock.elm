@@ -155,18 +155,34 @@ textBlockWith options value =
 
 computeIndentSize : List String -> Int
 computeIndentSize lines =
-    lines
-        |> List.filterMap
-            (\line ->
-                case Regex.find beginsWithWhitespace line of
-                    { match } :: _ ->
-                        Just (String.length match)
+    case lines of
+        line :: restOfLines ->
+            case Regex.find beginsWithWhitespace line of
+                { match } :: _ ->
+                    computeIndentSizeWithMinimum (String.length match) restOfLines
 
-                    _ ->
-                        Nothing
-            )
-        |> List.minimum
-        |> Maybe.withDefault 0
+                _ ->
+                    computeIndentSize restOfLines
+
+        [] ->
+            0
+
+
+computeIndentSizeWithMinimum : Int -> List String -> Int
+computeIndentSizeWithMinimum minimum lines =
+    case lines of
+        line :: restOfLines ->
+            case Regex.find beginsWithWhitespace line of
+                { match } :: _ ->
+                    computeIndentSizeWithMinimum
+                        (min (String.length match) minimum)
+                        restOfLines
+
+                _ ->
+                    computeIndentSizeWithMinimum minimum restOfLines
+
+        [] ->
+            minimum
 
 
 beginsWithWhitespace : Regex.Regex

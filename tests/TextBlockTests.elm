@@ -85,6 +85,25 @@ twoLineValueTests =
                 |> Expect.equal expected
 
 
+twoLineValueWithoutEmptyTrailingLineTests : Test
+twoLineValueWithoutEmptyTrailingLineTests =
+    test "Two line string without an empty trailing line gets returned with no padding" <|
+        \() ->
+            let
+                testValue : String
+                testValue =
+                    """
+                    Hello, World!
+                    I am me."""
+
+                expected : String
+                expected =
+                    "Hello, World!\nI am me."
+            in
+            textBlock testValue
+                |> Expect.equal expected
+
+
 newLineEscapeTests : Test
 newLineEscapeTests =
     test "Newlines omitted when \\ is used at end of line" <|

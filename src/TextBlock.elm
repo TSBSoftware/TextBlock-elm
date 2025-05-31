@@ -99,21 +99,21 @@ textBlockWith options value =
 
         blockedLines : List String
         blockedLines =
-            lines
-                |> List.map
-                    (\line ->
-                        let
-                            newLine : String
-                            newLine =
-                                trimStart line indentSize
-                                    |> String.trimRight
-                        in
-                        if String.endsWith "|" newLine then
-                            String.dropRight 1 newLine
+            List.map
+                (\line ->
+                    let
+                        newLine : String
+                        newLine =
+                            trimStart line indentSize
+                                |> String.trimRight
+                    in
+                    if String.endsWith "|" newLine then
+                        String.dropRight 1 newLine
 
-                        else
-                            newLine
-                    )
+                    else
+                        newLine
+                )
+                lines
 
         contentLines : List String
         contentLines =

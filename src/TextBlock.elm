@@ -184,15 +184,10 @@ computeIndentSizeWithMinimum minimum lines =
 
 computeContentLines : List String -> Int -> List String
 computeContentLines lines indentSize =
-    let
-        blockedLines : List String
-        blockedLines =
-            List.foldl
-                (\line acc -> trimLine line indentSize :: acc)
-                []
-                lines
-    in
-    blockedLines
+    List.foldl
+        (\line acc -> trimLine line indentSize :: acc)
+        []
+        lines
 
 
 trimLine : String -> Int -> String

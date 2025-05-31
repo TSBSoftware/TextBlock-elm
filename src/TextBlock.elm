@@ -209,12 +209,11 @@ trimStart line trimSize =
         spacePadding : String
         spacePadding =
             String.repeat trimSize " "
-
-        tabPadding : String
-        tabPadding =
-            String.repeat trimSize "\t"
     in
-    if String.startsWith spacePadding line || String.startsWith tabPadding line then
+    if
+        String.startsWith spacePadding line
+            || String.startsWith (String.repeat trimSize "\t") line
+    then
         String.dropLeft trimSize line
 
     else

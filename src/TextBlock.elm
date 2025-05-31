@@ -97,32 +97,9 @@ textBlockWith options value =
         indentSize =
             computeIndentSize lines
 
-        blockedLines : List String
-        blockedLines =
-            List.map
-                (\line ->
-                    let
-                        newLine : String
-                        newLine =
-                            trimStart line indentSize
-                                |> String.trimRight
-                    in
-                    if String.endsWith "|" newLine then
-                        String.dropRight 1 newLine
-
-                    else
-                        newLine
-                )
-                lines
-
         contentLines : List String
         contentLines =
-            case List.reverse blockedLines |> List.head of
-                Just "" ->
-                    List.take (List.length blockedLines - 1) blockedLines
-
-                _ ->
-                    blockedLines
+            computeContentLines lines indentSize
 
         joined : String
         joined =
@@ -187,6 +164,39 @@ computeIndentSizeWithMinimum minimum lines =
 
         [] ->
             minimum
+
+
+computeContentLines : List String -> Int -> List String
+computeContentLines lines indentSize =
+    let
+        blockedLines : List String
+        blockedLines =
+            List.map
+                (\line ->
+                    let
+                        newLine : String
+                        newLine =
+                            trimStart line indentSize
+                                |> String.trimRight
+                    in
+                    if String.endsWith "|" newLine then
+                        String.dropRight 1 newLine
+
+                    else
+                        newLine
+                )
+                lines
+
+        contentLines : List String
+        contentLines =
+            case List.reverse blockedLines |> List.head of
+                Just "" ->
+                    List.take (List.length blockedLines - 1) blockedLines
+
+                _ ->
+                    blockedLines
+    in
+    contentLines
 
 
 beginsWithWhitespace : Regex.Regex

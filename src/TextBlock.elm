@@ -121,22 +121,27 @@ joinLines options contentLines =
         [ single ] ->
             single
 
-        last :: rest ->
-            List.foldl
-                (\line acc ->
-                    if String.endsWith "\\" line then
-                        String.dropRight 1 line ++ acc ++ ""
+        line :: rest ->
+            joinLinesHelp options line rest
 
-                    else
-                        let
-                            paddedRight : String
-                            paddedRight =
-                                String.padLeft (String.length acc + options.indent) options.indentChar acc
-                        in
-                        line ++ options.newline ++ paddedRight ++ ""
-                )
-                last
-                rest
+
+joinLinesHelp : TextBlockOptions -> String -> List String -> String
+joinLinesHelp options startAcc lines =
+    List.foldl
+        (\line acc ->
+            if String.endsWith "\\" line then
+                String.dropRight 1 line ++ acc ++ ""
+
+            else
+                let
+                    paddedRight : String
+                    paddedRight =
+                        String.padLeft (String.length acc + options.indent) options.indentChar acc
+                in
+                line ++ options.newline ++ paddedRight ++ ""
+        )
+        startAcc
+        lines
 
 
 computeIndentSize : List String -> Int

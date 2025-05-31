@@ -129,7 +129,7 @@ textBlockWith options value =
 
         padded : String
         padded =
-            String.padLeft (String.length joined + options.indent) options.indentChar joined
+            String.repeat options.indent (String.fromChar options.indentChar) ++ joined ++ ""
     in
     padded
 

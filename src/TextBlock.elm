@@ -113,15 +113,15 @@ textBlockWith options value =
 
                 first :: rest ->
                     List.foldl
-                        (\r acc ->
+                        (\line acc ->
                             if String.endsWith "\\" acc then
-                                String.dropRight 1 acc ++ r ++ ""
+                                String.dropRight 1 acc ++ line ++ ""
 
                             else
                                 let
                                     paddedRight : String
                                     paddedRight =
-                                        String.padLeft (String.length r + options.indent) options.indentChar r
+                                        String.padLeft (String.length line + options.indent) options.indentChar line
                                 in
                                 acc ++ options.newline ++ paddedRight ++ ""
                         )

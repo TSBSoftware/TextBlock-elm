@@ -160,12 +160,11 @@ computeIndentSize lines =
             (\line ->
                 case Regex.find beginsWithWhitespace line of
                     match :: _ ->
-                        Just match
+                        Just (String.length match.match)
 
                     _ ->
                         Nothing
             )
-        |> List.map (\match -> String.length match.match)
         |> List.minimum
         |> Maybe.withDefault 0
 

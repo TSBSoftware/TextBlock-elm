@@ -171,21 +171,7 @@ computeContentLines lines indentSize =
     let
         blockedLines : List String
         blockedLines =
-            List.map
-                (\line ->
-                    let
-                        newLine : String
-                        newLine =
-                            trimStart line indentSize
-                                |> String.trimRight
-                    in
-                    if String.endsWith "|" newLine then
-                        String.dropRight 1 newLine
-
-                    else
-                        newLine
-                )
-                lines
+            List.map (\line -> trimLine line indentSize) lines
 
         contentLines : List String
         contentLines =
@@ -197,6 +183,21 @@ computeContentLines lines indentSize =
                     blockedLines
     in
     contentLines
+
+
+trimLine : String -> Int -> String
+trimLine line indentSize =
+    let
+        newLine : String
+        newLine =
+            trimStart line indentSize
+                |> String.trimRight
+    in
+    if String.endsWith "|" newLine then
+        String.dropRight 1 newLine
+
+    else
+        newLine
 
 
 beginsWithWhitespace : Regex.Regex

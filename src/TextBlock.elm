@@ -158,11 +158,11 @@ computeIndentSize lines =
     lines
         |> List.filterMap
             (\line ->
-                case Regex.find beginsWithWhitespace line |> List.head of
-                    Just match ->
+                case Regex.find beginsWithWhitespace line of
+                    match :: _ ->
                         Just match
 
-                    Nothing ->
+                    _ ->
                         Nothing
             )
         |> List.map (\match -> String.length match.match)

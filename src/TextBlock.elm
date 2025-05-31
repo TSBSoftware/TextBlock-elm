@@ -100,6 +100,7 @@ textBlockWith options value =
         contentLines : List String
         contentLines =
             computeContentLines lines indentSize
+                |> List.reverse
 
         joined : String
         joined =
@@ -178,10 +179,10 @@ computeContentLines lines indentSize =
     in
     case blockedLines of
         "" :: restOfLines ->
-            List.reverse restOfLines
+            restOfLines
 
         _ ->
-            List.reverse blockedLines
+            blockedLines
 
 
 trimLine : String -> Int -> String

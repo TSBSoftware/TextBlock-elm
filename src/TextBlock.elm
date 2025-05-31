@@ -137,7 +137,7 @@ textBlockWith options value =
                     List.foldl
                         (\r l ->
                             if String.endsWith "\\" l then
-                                String.dropRight 1 l ++ r
+                                String.dropRight 1 l ++ r ++ ""
 
                             else
                                 let
@@ -145,7 +145,7 @@ textBlockWith options value =
                                     paddedRight =
                                         String.padLeft (String.length r + options.indent) options.indentChar r
                                 in
-                                l ++ options.newline ++ paddedRight
+                                l ++ options.newline ++ paddedRight ++ ""
                         )
                         first
                         rest
@@ -214,7 +214,7 @@ textBlockWithFormat options replacements template =
             textBlockWith options template
     in
     List.foldl
-        (\( key, value ) str -> String.replace (options.templateValueStart ++ key ++ options.templateValueEnd) value str)
+        (\( key, value ) str -> String.replace (options.templateValueStart ++ key ++ options.templateValueEnd ++ "") value str)
         base
         replacements
 

@@ -100,8 +100,11 @@ textBlockWith options value =
         blockedLines : List String
         blockedLines =
             lines
-                |> List.map (\line -> trimStart line indentSize)
-                |> List.map String.trimRight
+                |> List.map
+                    (\line ->
+                        trimStart line indentSize
+                            |> String.trimRight
+                    )
                 |> List.map
                     (\line ->
                         if String.endsWith "|" line then

@@ -95,12 +95,7 @@ textBlockWith options value =
 
         indentSize : Int
         indentSize =
-            lines
-                |> List.map (\line -> Regex.find beginsWithWhitespace line)
-                |> List.filterMap List.head
-                |> List.map (\match -> String.length match.match)
-                |> List.minimum
-                |> Maybe.withDefault 0
+            computeIndentSize lines
 
         blockedLines : List String
         blockedLines =
@@ -156,6 +151,16 @@ textBlockWith options value =
             String.padLeft (String.length joined + options.indent) options.indentChar joined
     in
     padded
+
+
+computeIndentSize : List String -> Int
+computeIndentSize lines =
+    lines
+        |> List.map (\line -> Regex.find beginsWithWhitespace line)
+        |> List.filterMap List.head
+        |> List.map (\match -> String.length match.match)
+        |> List.minimum
+        |> Maybe.withDefault 0
 
 
 beginsWithWhitespace : Regex.Regex

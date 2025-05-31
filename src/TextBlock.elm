@@ -160,7 +160,8 @@ textBlockWith options value =
 
 beginsWithWhitespace : Regex.Regex
 beginsWithWhitespace =
-    Maybe.withDefault Regex.never (Regex.fromString "^([\\s]+)")
+    Regex.fromString "^([\\s]+)"
+        |> Maybe.withDefault Regex.never
 
 
 {-| Process a multiline string with custom options and replace placeholders with values.

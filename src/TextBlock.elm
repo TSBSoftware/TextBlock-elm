@@ -93,73 +93,122 @@ textBlockWith options value =
         lines =
             splitLines options value
 
-        beginsWithWhitespace : Regex.Regex
-        beginsWithWhitespace =
-            Maybe.withDefault Regex.never (Regex.fromString "^([\\s]+)")
-
         indentSize : Int
         indentSize =
-            lines
-                |> List.map (\line -> Regex.find beginsWithWhitespace line)
-                |> List.filterMap List.head
-                |> List.map (\match -> String.length match.match)
-                |> List.minimum
-                |> Maybe.withDefault 0
-
-        blockedLines : List String
-        blockedLines =
-            lines
-                |> List.map (\line -> trimStart line indentSize)
-                |> List.map String.trimRight
-                |> List.map
-                    (\line ->
-                        if String.endsWith "|" line then
-                            String.dropRight 1 line
-
-                        else
-                            line
-                    )
+            computeIndentSize lines
 
         contentLines : List String
         contentLines =
-            case List.reverse blockedLines |> List.head of
-                Just "" ->
-                    List.take (List.length blockedLines - 1) blockedLines
-
-                _ ->
-                    blockedLines
+            computeContentLines lines indentSize
 
         joined : String
         joined =
-            case contentLines of
-                [] ->
-                    ""
-
-                [ single ] ->
-                    single
-
-                first :: rest ->
-                    List.foldl
-                        (\r l ->
-                            if String.endsWith "\\" l then
-                                String.dropRight 1 l ++ r
-
-                            else
-                                let
-                                    paddedRight : String
-                                    paddedRight =
-                                        String.padLeft (String.length r + options.indent) options.indentChar r
-                                in
-                                l ++ options.newline ++ paddedRight
-                        )
-                        first
-                        rest
+            joinLines options contentLines
 
         padded : String
         padded =
-            String.padLeft (String.length joined + options.indent) options.indentChar joined
+            String.repeat options.indent (String.fromChar options.indentChar) ++ joined ++ ""
     in
     padded
+
+
+joinLines : TextBlockOptions -> List String -> String
+joinLines options contentLines =
+    case contentLines of
+        [] ->
+            ""
+
+        [ single ] ->
+            single
+
+        "" :: line :: [] ->
+            line
+
+        "" :: line :: rest ->
+            joinLinesHelp options line rest
+
+        line :: rest ->
+            joinLinesHelp options line rest
+
+
+joinLinesHelp : TextBlockOptions -> String -> List String -> String
+joinLinesHelp options startAcc lines =
+    List.foldl
+        (\line acc ->
+            if String.endsWith "\\" line then
+                String.dropRight 1 line ++ acc ++ ""
+
+            else
+                let
+                    paddedRight : String
+                    paddedRight =
+                        String.padLeft (String.length acc + options.indent) options.indentChar acc
+                in
+                line ++ options.newline ++ paddedRight ++ ""
+        )
+        startAcc
+        lines
+
+
+computeIndentSize : List String -> Int
+computeIndentSize lines =
+    case lines of
+        line :: restOfLines ->
+            case Regex.find beginsWithWhitespace line of
+                { match } :: _ ->
+                    computeIndentSizeWithMinimum (String.length match) restOfLines
+
+                _ ->
+                    computeIndentSize restOfLines
+
+        [] ->
+            0
+
+
+computeIndentSizeWithMinimum : Int -> List String -> Int
+computeIndentSizeWithMinimum minimum lines =
+    case lines of
+        line :: restOfLines ->
+            case Regex.find beginsWithWhitespace line of
+                { match } :: _ ->
+                    computeIndentSizeWithMinimum
+                        (min (String.length match) minimum)
+                        restOfLines
+
+                _ ->
+                    computeIndentSizeWithMinimum minimum restOfLines
+
+        [] ->
+            minimum
+
+
+computeContentLines : List String -> Int -> List String
+computeContentLines lines indentSize =
+    List.foldl
+        (\line acc -> trimLine line indentSize :: acc)
+        []
+        lines
+
+
+trimLine : String -> Int -> String
+trimLine line indentSize =
+    let
+        newLine : String
+        newLine =
+            trimStart line indentSize
+                |> String.trimRight
+    in
+    if String.endsWith "|" newLine then
+        String.dropRight 1 newLine
+
+    else
+        newLine
+
+
+beginsWithWhitespace : Regex.Regex
+beginsWithWhitespace =
+    Regex.fromString "^(\\s+)"
+        |> Maybe.withDefault Regex.never
 
 
 {-| Process a multiline string with custom options and replace placeholders with values.
@@ -181,7 +230,7 @@ textBlockWithFormat options replacements template =
             textBlockWith options template
     in
     List.foldl
-        (\( key, value ) str -> String.replace (options.templateValueStart ++ key ++ options.templateValueEnd) value str)
+        (\( key, value ) str -> String.replace (options.templateValueStart ++ key ++ options.templateValueEnd ++ "") value str)
         base
         replacements
 
@@ -203,16 +252,10 @@ splitLines options value =
 
 trimStart : String -> Int -> String
 trimStart line trimSize =
-    let
-        spacePadding : String
-        spacePadding =
-            String.repeat trimSize " "
-
-        tabPadding : String
-        tabPadding =
-            String.repeat trimSize "\t"
-    in
-    if String.startsWith spacePadding line || String.startsWith tabPadding line then
+    if
+        String.startsWith (String.repeat trimSize " ") line
+            || String.startsWith (String.repeat trimSize "\t") line
+    then
         String.dropLeft trimSize line
 
     else

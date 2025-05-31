@@ -171,7 +171,10 @@ computeContentLines lines indentSize =
     let
         blockedLines : List String
         blockedLines =
-            List.map (\line -> trimLine line indentSize) lines
+            List.foldr
+                (\line acc -> trimLine line indentSize :: acc)
+                []
+                lines
 
         contentLines : List String
         contentLines =

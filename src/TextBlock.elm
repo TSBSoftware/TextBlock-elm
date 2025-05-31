@@ -102,11 +102,12 @@ textBlockWith options value =
             lines
                 |> List.map
                     (\line ->
-                        trimStart line indentSize
-                            |> String.trimRight
-                    )
-                |> List.map
-                    (\newLine ->
+                        let
+                            newLine : String
+                            newLine =
+                                trimStart line indentSize
+                                    |> String.trimRight
+                        in
                         if String.endsWith "|" newLine then
                             String.dropRight 1 newLine
 

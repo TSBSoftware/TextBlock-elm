@@ -171,19 +171,19 @@ computeContentLines lines indentSize =
     let
         blockedLines : List String
         blockedLines =
-            List.foldr
+            List.foldl
                 (\line acc -> trimLine line indentSize :: acc)
                 []
                 lines
 
         contentLines : List String
         contentLines =
-            case List.reverse blockedLines of
+            case blockedLines of
                 "" :: restOfLines ->
                     List.reverse restOfLines
 
                 _ ->
-                    blockedLines
+                    List.reverse blockedLines
     in
     contentLines
 

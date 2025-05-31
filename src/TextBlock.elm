@@ -121,6 +121,12 @@ joinLines options contentLines =
         [ single ] ->
             single
 
+        "" :: line :: [] ->
+            line
+
+        "" :: line :: rest ->
+            joinLinesHelp options line rest
+
         line :: rest ->
             joinLinesHelp options line rest
 
@@ -186,12 +192,7 @@ computeContentLines lines indentSize =
                 []
                 lines
     in
-    case blockedLines of
-        "" :: restOfLines ->
-            restOfLines
-
-        _ ->
-            blockedLines
+    blockedLines
 
 
 trimLine : String -> Int -> String

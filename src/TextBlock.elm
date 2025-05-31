@@ -112,9 +112,9 @@ textBlockWith options value =
 
                 last :: rest ->
                     List.foldl
-                        (\x acc ->
-                            if String.endsWith "\\" x then
-                                String.dropRight 1 x ++ acc ++ ""
+                        (\line acc ->
+                            if String.endsWith "\\" line then
+                                String.dropRight 1 line ++ acc ++ ""
 
                             else
                                 let
@@ -122,7 +122,7 @@ textBlockWith options value =
                                     paddedRight =
                                         String.padLeft (String.length acc + options.indent) options.indentChar acc
                                 in
-                                x ++ options.newline ++ paddedRight ++ ""
+                                line ++ options.newline ++ paddedRight ++ ""
                         )
                         last
                         rest

@@ -178,9 +178,9 @@ computeContentLines lines indentSize =
 
         contentLines : List String
         contentLines =
-            case List.reverse blockedLines |> List.head of
-                Just "" ->
-                    List.take (List.length blockedLines - 1) blockedLines
+            case List.reverse blockedLines of
+                "" :: restOfLines ->
+                    List.reverse restOfLines
 
                 _ ->
                     blockedLines

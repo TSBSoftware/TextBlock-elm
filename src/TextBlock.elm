@@ -205,13 +205,8 @@ splitLines options value =
 
 trimStart : String -> Int -> String
 trimStart line trimSize =
-    let
-        spacePadding : String
-        spacePadding =
-            String.repeat trimSize " "
-    in
     if
-        String.startsWith spacePadding line
+        String.startsWith (String.repeat trimSize " ") line
             || String.startsWith (String.repeat trimSize "\t") line
     then
         String.dropLeft trimSize line

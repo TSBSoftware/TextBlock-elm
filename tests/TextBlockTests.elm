@@ -276,8 +276,8 @@ GH
                 |> Expect.equal expected
 
 
-embededNewlineTests : Test
-embededNewlineTests =
+embeddedNewlineTests : Test
+embeddedNewlineTests =
     test "Embedded newline characters create new lines" <|
         \() ->
             let
